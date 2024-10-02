@@ -1,0 +1,10 @@
+//I was messing around with regular expressions. You see, a part of it is GPT generated, but it works good. 
+void main() {
+    // Regular Expression to check if the name is more than 3 characters long and contains only letters and digits
+    regexp re("^[a-zA-Z0-9]{4,}$");
+
+    string compare = input_box("Text", "Enter the name to check against the regular expression.");
+
+    bool matches = re.match(compare);
+    alert("The regular expression", matches ? "matches the name requirements" : "does not match the name requirements");
+}

@@ -1,0 +1,77 @@
+class game_map
+{
+coordinate_map m;
+int maxx, maxy;
+void reset()
+{
+m.reset();
+maxx=0;
+maxy=0;
+}
+void platform(int minx, int maxx, int y, string tile, string zone="", int priority=0)
+{
+platform(minx, maxx, y, y, tile, zone, priority);
+}
+void platform(int minx, int maxx, int miny, int maxy, string tile, string zone="", int priority=0)
+{
+m.add_area(minx, maxx, miny, maxy, 0, 0, 0, any(tile), tile, zone, "", priority);
+if (maxx>this.maxx)
+this.maxx=maxx;
+if (maxy+10>this.maxy)
+this.maxy=maxy+10;
+}
+void wall(int minx, int maxx, int miny, int maxy, string type)
+{
+platform(minx, maxx, miny, maxy, "wall"+type,priority:1);
+}
+bool is_wall(int x, int y)
+{
+string t=this.opIndex(x,y);
+if (t.starts_with("wall"))
+return true;
+return false;
+}
+bool disable_area(int x, int y, int priority=0)
+{
+coordinate_map_area@ a=m.get_area(x, y, 0,priority);
+if (a==null)
+return false;
+a.unframe();
+return true;
+}
+bool enable_area(int x, int y, int priority=0)
+{
+coordinate_map_area@ a=m.get_area(x, y, 0, priority);
+if (a==null)
+return false;
+a.reframe();
+return true;
+}
+string opIndex(int x, int y)
+{
+string value;
+opIndex(x, y, 0).retrieve(value);
+return value;
+}
+string opIndex(int x, int y, bool zone)
+{
+string value;
+opIndex(x, y, zone==true?1:0).retrieve(value);
+return value;
+}
+any@ opIndex(int x, int y, int mode)
+{
+coordinate_map_area@ a=m.get_area(x, y, 0);
+if (a==null)
+return "";
+else
+{
+if (mode==0)
+return a.data1;
+else if (mode==1)
+return a.data2;
+else
+return @a;
+}
+}
+}

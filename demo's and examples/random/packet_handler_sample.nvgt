@@ -1,0 +1,38 @@
+// OK, so here is sort of what I do in stw. The following is very much pseudocode designed to convey an idea and will not directly run. There was mention of JSON, sure that's a cool idea, so I'll sort of adapt the pseudocode to use that.
+
+// A funcdef lets you retrieve function handles of a given type from a dictionary or in other ways call dynamic functions.
+funcdef void packet_handler(player@, json_object@);
+
+// Lets make some packet functions, you could separate these into as many includes as you like.
+void packet_jump(player@ p, json_object@ packet) {
+	p.jump();
+}
+void packet_chat(player@ p, json_object@ packet) {
+	if (!packet.exists("message")) return; // Perform other checks to avoid a user sending malicious packets.
+	json_object resp;
+	resp["command"] = "speak"; // At some point it will be possible to create json objects in one line with initializer lists.
+	resp["text"] = "%0 says %1".format(p.name, string(packet["message"]));
+	send_to_all_players(resp.stringify());
+}
+// Now we need a function you should execute in your main function that sets up a dictionary of packets.
+dictionary packets;
+void setup_packets() {
+	packets.set("jump", packet_jump);
+	packets.set("chat", player_chat);
+}
+// Finally you would handle the packets like this.
+void handle_event(network_event@ event) {
+	if (event.type != event_receive) return; // Handle those however you like, not the purpose of this.
+	// Exersize: Right now we will retrieve the packet function directly, but why not instead create a server_packet class which stores such a packet_handler@ reference and other flags for the packets such as whether each one requires a player, other things to verify right here to avoid malicious intent etc? For now only packets from valid players are handled.
+	player@ p = get_player(event.peer_id);
+	if (@p == null) return; // Handle non-player packets.
+	try { // We don't need to do much error checking now because it will all be handled by the below catch statement at this point
+		json_object@ packet = parse_json(event.message);
+		// Fetch the packet_handler from the dictionary.
+		packet_handler@ ph = cast<packet_handler@>(packets[string(packet["command"])]);
+		// Now we can call it just like a normal function.
+		ph(p, packet);
+	} catch {
+		// Log the exception.
+	}
+}

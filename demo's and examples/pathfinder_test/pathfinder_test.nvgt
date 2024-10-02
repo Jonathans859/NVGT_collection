@@ -1,0 +1,114 @@
+#include"map.nvgt"
+#include"speech.nvgt"
+#include"sound_pool.nvgt"
+game_map map;
+pathfinder pf;
+int path_callback(int x, int y, int z, any@ data=null)
+{
+if (map[x,y]=="acid")
+{
+return 10;
+}
+else if (map[x,y]=="water")
+{
+return 6;
+}
+else if (map[x,y]=="large_rock")
+{
+return 4;
+}
+else
+{
+return 0;
+}
+}
+timer mt;
+vector me;
+sound_pool p;
+int sx, sy;
+int ex, ey;
+void main()
+{
+show_window("Pathfinder test");
+map.reset();
+map.maxx=40;
+map.maxy=40;
+map.platform(0,40,0,40,"concrete");
+map.platform(20,25,20,25,"acid",priority:1);
+map.platform(10,15,10,15,"water",priority:1);
+pf.set_callback_function(path_callback);
+while(true)
+{
+p.update_listener_2d(me.x,me.y);
+wait(5);
+if (key_down(KEY_LEFT) and mt.elapsed>=200 and me.x>0)
+{
+mt.restart();
+me.x--;
+p.play_stationary("sounds/"+map[me.x,me.y]+""+random(1,5)+".ogg",false);
+}
+if (key_down(KEY_RIGHT) and mt.elapsed>=200 and me.x<map.maxx)
+{
+mt.restart();
+me.x++;
+p.play_stationary("sounds/"+map[me.x,me.y]+""+random(1,5)+".ogg",false);
+}
+if (key_down(KEY_UP) and mt.elapsed>=200 and me.y<map.maxy)
+{
+mt.restart();
+me.y++;
+p.play_stationary("sounds/"+map[me.x,me.y]+""+random(1,5)+".ogg",false);
+}
+if (key_down(KEY_DOWN) and mt.elapsed>=200 and me.y>0)
+{
+mt.restart();
+me.y--;
+p.play_stationary("sounds/"+map[me.x,me.y]+""+random(1,5)+".ogg",false);
+}
+if (key_pressed(KEY_X))
+{
+if (key_down(KEY_LSHIFT) or key_down(KEY_RSHIFT))
+{
+ex=me.x;
+speak("end x is now set to "+ex);
+}
+else
+{
+sx=me.x;
+speak("start x is now set to "+sx);
+}
+}
+if (key_pressed(KEY_Y))
+{
+if (key_down(KEY_LSHIFT) or key_down(KEY_RSHIFT))
+{
+ey=me.y;
+speak("end y is now set to "+ey);
+}
+else
+{
+sy=me.y;
+speak("start y is now set to "+sy);
+}
+}
+if (key_pressed(KEY_C))
+{
+speak(me.x+" "+me.y);
+}
+if (key_pressed(KEY_ESCAPE))
+{
+exit();
+}
+if (key_pressed(KEY_SPACE))
+{
+vector[]@ v=pf.find(sx,sy,0,ex,ey,0,"");
+for(uint i=0; i<v.length(); i++)
+{
+int x=v[i].x;
+int y=v[i].y;
+p.play_2d("sounds/"+map[x,y]+""+random(1,5)+".ogg",sx,sy,x,y,false);
+wait(200);
+}
+}
+}
+}

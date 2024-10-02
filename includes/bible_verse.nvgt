@@ -1,0 +1,5 @@
+//retrieve a random bible verse
+string get_bible_verse()
+{
+	return url_get("https://beta.ourmanna.com/api/v1/get");
+}
