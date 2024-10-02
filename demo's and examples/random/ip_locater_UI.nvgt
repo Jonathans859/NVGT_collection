@@ -1,0 +1,18 @@
+#include"../../includes/ip_locate.nvgt"
+#include"form.nvgt"
+audio_form f;
+void main()
+{
+	f.create_window("IP locator",true,false,false);
+	int ip=f.create_input_box("IP/domain",url_get("https://ipinfo.io/ip"),"",0); //creates an input to enter an IP with the default IP set to your public IPV 4 address, retrieved from ipinfo.io
+	int locate=f.create_button("&Locate",true,false);
+	int q=f.create_button("&Quit",false,true);
+	f.focus(ip);
+	while(true)
+	{
+		wait(5);
+		f.monitor();
+		if(f.is_pressed(q)) exit();
+		if(f.is_pressed(locate)) info_box("IP locator","Result",ip_locate(f.get_text(ip))); //show the result
+	}
+}
