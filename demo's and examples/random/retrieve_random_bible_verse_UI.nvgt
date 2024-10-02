@@ -1,0 +1,18 @@
+#include"../../includes/bible_verse.nvgt"
+#include"form.nvgt"
+audio_form f;
+void main()
+{
+	f.create_window("Bible verse retriever",true,false,false);
+	wait(500);
+	int verse=f.create_input_box("Your random Bible verse",get_bible_verse(),"",0,true);
+	f.focus(verse);
+	int q=f.create_button("Quit",false,true);
+	f.set_state(q,false,false);
+	while(true)
+	{
+		wait(5);
+		f.monitor();
+		if(f.is_pressed(q)) exit();
+	}
+}
