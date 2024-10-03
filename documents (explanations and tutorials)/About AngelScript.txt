@@ -1,0 +1,4 @@
+This is a link Rory once gave to me. It talks about "AngelScript", the scripting language NVGT uses.
+'
+https://wiki.frictionalgames.com/page/HPL3/Scripting/AngelScript_Fundamentals
+'

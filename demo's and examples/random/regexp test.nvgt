@@ -1,4 +1,4 @@
-//I was messing around with regular expressions. You see, a part of it is GPT generated, but it works good. 
+//I was messing around with regular expressions. You see, a part of it is GPT generated, but it works good. The reason why I put this here is that for a long time, I had no clue how to use them and what they were good for, and this is a pretty good example to figure it out.
 void main() {
     // Regular Expression to check if the name is more than 3 characters long and contains only letters and digits
     regexp re("^[a-zA-Z0-9]{4,}$");
