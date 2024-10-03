@@ -1,4 +1,4 @@
-# Utils, examples and tutorials regarding [the Nonvisual Gaming Toolkit](https://nvgt.gg)
+# NVGT Collection
 You can use these resources for free. If you do so, credits to [Jonathan859](https://jonathan859.xyz) or [this repository](https://github.com/jonathans859/NVGT_collection) would be appriciated but are not required.
 
 # Contribution
