@@ -1,9 +1,15 @@
 //simple function which returns information about an IP
+string ip_api_url="http://ip-api.com/json/";
 string ip_locate(string ip)
 {
-	string api_url="http://ip-api.com/json/";
-	string response=url_get(api_url+ip);
+	string response=url_get(ip_api_url+ip);
 	json_object@ o = parse_json(response);;
-	string response_string="Status: "+o["status"]+"\r\nIP: "+ip+"\r\nCountry: "+o["country"]+"\r\nRegion: "+o["regionName"]+"\r\nCity: "+o["city"]+"\r\nZip: "+o["zip"]+"\r\nTimezone: "+o["timezone"]+"\r\nISP: "+o["isp"];
+	string response_string;
+	try{
+		response_string="Status: "+o["status"]+"\r\nIP: "+o["query"]+"\r\nCountry: "+o["country"]+"\r\nRegion: "+o["regionName"]+"\r\nCity: "+o["city"]+"\r\nZip: "+o["zip"]+"\r\nTimezone: "+o["timezone"]+"\r\nISP: "+o["isp"];
+	}
+	catch{
+		response_string=o["message"];
+	}
 	return response_string;
 }
