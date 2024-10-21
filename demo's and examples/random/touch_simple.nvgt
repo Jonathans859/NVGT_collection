@@ -1,0 +1,29 @@
+//demo sent by mason on discord. I find it pretty simple and useful, so thought I'd add it here as well.
+#include"speech.nvgt"
+#include "touch.nvgt"
+touch_gesture_manager touch;
+void main()
+{
+touch_keyboard_interface touchgame(touch,{{"swipe_left1f",KEY_LEFT}, {"swipe_right1f",KEY_RIGHT}, {"swipe_up1f",KEY_UP}, {"swipe_down1f",KEY_DOWN}, {"double_tap1f",KEY_ESCAPE}});
+touch.add_touch_interface(touchgame);
+show_window("Simple touch test");
+while(true)
+{
+wait(5);
+touch.monitor();
+if (key_pressed(KEY_LEFT))
+speak("Left");
+if (key_pressed(KEY_RIGHT))
+speak("Right");
+if (key_pressed(KEY_UP))
+speak("Up");
+if (key_pressed(KEY_DOWN))
+speak("Down");
+if (key_pressed(KEY_ESCAPE))
+{
+speak("Double tap. Exiting.");
+wait(2000);
+exit();
+}
+}
+}
